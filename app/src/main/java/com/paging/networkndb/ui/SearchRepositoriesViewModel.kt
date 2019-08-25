@@ -24,6 +24,8 @@ class SearchRepositoriesViewModel(private val repository: GithubRepository) : Vi
     ) { it.data }
     val networkErrors: LiveData<String> = Transformations.switchMap(repoResult
     ) { it.networkErrors }
+    val loadingState: LiveData<Boolean> = Transformations.switchMap(repoResult
+    ) { it.loadingState }
 
     /**
      * Search a repository based on a query string.

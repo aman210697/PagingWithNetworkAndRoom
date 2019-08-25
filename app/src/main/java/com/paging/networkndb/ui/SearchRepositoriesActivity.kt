@@ -55,6 +55,10 @@ class SearchRepositoriesActivity : AppCompatActivity() {
         viewModel.networkErrors.observe(this, Observer<String> {
             Toast.makeText(this, "\uD83D\uDE28 Wooops ${it}", Toast.LENGTH_LONG).show()
         })
+
+         viewModel.loadingState.observe(this, Observer<Boolean> {
+             progress_bar.visibility = if(it) View.VISIBLE else View.GONE
+        })
     }
 
     private fun initSearch(query: String) {

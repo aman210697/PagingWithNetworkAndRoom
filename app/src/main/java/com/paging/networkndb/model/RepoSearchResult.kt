@@ -9,5 +9,6 @@ import androidx.paging.PagedList
  */
 data class RepoSearchResult(
         val data: LiveData<PagedList<Repo>>,
-        val networkErrors: LiveData<String>
+        val networkErrors: LiveData<String>,
+        val loadingState: LiveData<Boolean>
 )

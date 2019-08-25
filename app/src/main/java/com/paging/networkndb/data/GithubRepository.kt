@@ -26,6 +26,7 @@ class GithubRepository(
         // Construct the boundary callback
         val boundaryCallback = RepoBoundaryCallback(query, service, cache)
         val networkErrors = boundaryCallback.networkErrors
+        val loadingState = boundaryCallback.isRequestInProgress
 
         // Get the paged list
         val data = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE)
@@ -34,7 +35,7 @@ class GithubRepository(
 
 
         // Get the network errors exposed by the boundary callback
-        return RepoSearchResult(data, networkErrors)
+        return RepoSearchResult(data, networkErrors,loadingState)
     }
 
     companion object {

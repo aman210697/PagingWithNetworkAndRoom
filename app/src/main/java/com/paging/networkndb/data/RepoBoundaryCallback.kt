@@ -16,7 +16,6 @@ class RepoBoundaryCallback(
 
     companion object {
         private const val NETWORK_PAGE_SIZE = 50
-        private const val DATABASE_PAGE_SIZE = 20
     }
 
     // keep the last requested page. When the request is successful, increment the page number.
@@ -29,8 +28,10 @@ class RepoBoundaryCallback(
         get() = _networkErrors
 
     // avoid triggering multiple requests in the same time
-    private var isRequestInProgress = false
-
+    private var _isRequestInProgress = MutableLiveData<Boolean>().apply {this.value=false }
+    //LiveData of progress
+    val isRequestInProgress: LiveData<Boolean>
+        get() = _isRequestInProgress
 
     override fun onZeroItemsLoaded() {
         requestAndSaveData(query)
@@ -42,17 +43,19 @@ class RepoBoundaryCallback(
 
 
     private fun requestAndSaveData(query: String) {
-        if (isRequestInProgress) return
+        if (_isRequestInProgress.value!!) return
 
-        isRequestInProgress = true
+        _isRequestInProgress.postValue(true)
         searchRepos(service, query, lastRequestedPage, NETWORK_PAGE_SIZE, { repos ->
             cache.insert(repos) {
                 lastRequestedPage++
-                isRequestInProgress = false
+
+                //using post value because it'll be called on background thread
+                _isRequestInProgress.postValue(false)
             }
         }, { error ->
             _networkErrors.postValue(error)
-            isRequestInProgress = false
+            _isRequestInProgress.postValue(false)
         })
     }
 }
