@@ -1,5 +1,3 @@
-
-
 package com.paging.networkndb.db
 
 import androidx.room.Database

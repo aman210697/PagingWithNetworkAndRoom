@@ -1,5 +1,3 @@
-
-
 package com.paging.networkndb.api
 
 import android.util.Log
@@ -44,7 +42,6 @@ fun searchRepos(
     service.searchRepos(apiQuery, page, itemsPerPage).enqueue(
             object : Callback<RepoSearchResponse> {
                 override fun onFailure(call: Call<RepoSearchResponse>?, t: Throwable) {
-                    Log.d(TAG, "fail to get data")
                     onError(t.message ?: "unknown error")
                 }
 
@@ -52,7 +49,6 @@ fun searchRepos(
                         call: Call<RepoSearchResponse>?,
                         response: Response<RepoSearchResponse>
                 ) {
-                    Log.d(TAG, "got a response $response")
                     if (response.isSuccessful) {
                         val repos = response.body()?.items ?: emptyList()
                         onSuccess(repos)
